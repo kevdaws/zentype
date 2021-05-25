@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 
 function App() {
   
+  const [word, updateWord] = useState('');
   const [words, updateWords] = useState([]);
 
   useEffect(() => {
@@ -21,9 +22,20 @@ function App() {
   }
   
   const newInput = useCallback((event) => {
-    updateWords(event.target.value);
-    console.log(event.target.value);
-  }, [words]);
+    updateWord(event.target.value);
+  }, [word]);
+
+  const validateInput = useCallback(() => {
+    for (let i = 0; i < words.length; i++) {
+      for (let j = 0; j < words[i].length; i++) {
+        if (word[i][j] == words[i][j]) {
+          console.log("TRUE");
+        } else {
+          console.log("FALSE");
+        }
+      }
+    }
+  }, [word]);
   
   return (
     
@@ -34,8 +46,10 @@ function App() {
     </div>
 
     <div className="body">
-      <input onChange="newInput"></input>
+      <input onChange={newInput}></input>
       <p>{words}</p>
+
+      <p>{word}</p>
     </div>
     
     </div>
