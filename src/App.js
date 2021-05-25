@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from 'react';
 
 function App() {
   
-  const [word, updateWord] = useState('');
+  const [words, updateWords] = useState([]);
 
   useEffect(() => {
     randomWords();
@@ -12,14 +12,18 @@ function App() {
   
   const randomWords = async () => {
     const res = await fetch("https://random-word-api.herokuapp.com/word?number=10")
-    const words = await res.json();
-    updateWord(words);
+    const json = await res.json();
+    let body = [];
+    for (let i = 0; i < json.length; i++) {
+      body.push(json[i] + " ");
+    }
+    updateWords(body);
   }
   
   const newInput = useCallback((event) => {
-    updateWord(event.target.value);
+    updateWords(event.target.value);
     console.log(event.target.value);
-  }, [word]);
+  }, [words]);
   
   return (
     
@@ -30,8 +34,8 @@ function App() {
     </div>
 
     <div className="body">
-      <input value={word} onChange="newInput"></input>
-      <p>{word}</p>
+      <input onChange="newInput"></input>
+      <p>{words}</p>
     </div>
     
     </div>
