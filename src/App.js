@@ -1,59 +1,42 @@
+import Text from './Text';
+import { useState } from 'react';
 
-import './App.css';
-import { useState, useCallback, useEffect } from 'react';
-
-function App() {
-  
-  const [word, updateWord] = useState('');
-  const [words, updateWords] = useState([]);
-
-  useEffect(() => {
-    randomWords();
-  }, []);
-  
-  const randomWords = async () => {
-    const res = await fetch("https://random-word-api.herokuapp.com/word?number=10")
-    const json = await res.json();
-    let body = [];
-    for (let i = 0; i < json.length; i++) {
-      body.push(json[i] + " ");
+const App = () => {
+    
+    const initialState = {
+        text: 'Test',
+        userInput: ''
     }
-    updateWords(body);
-  }
-  
-  const newInput = useCallback((event) => {
-    updateWord(event.target.value);
-  }, [word]);
+    const [state, setState] = useState(initialState);
 
-  const validateInput = useCallback(() => {
-    for (let i = 0; i < words.length; i++) {
-      for (let j = 0; j < words[i].length; i++) {
-        if (word[i][j] == words[i][j]) {
-          console.log("TRUE");
-        } else {
-          console.log("FALSE");
-        }
-      }
+    const onRestart = () => {
+        setState(initialState);
     }
-  }, [word]);
-  
-  return (
+
+    const onInputChange = (event) => {
+        setState({
+            userInput: event.target.value
+        })
+    }
     
-    <div className="App">
+    return (
     
-    <div className="Header">
-      <h1>Welcome to ZenType</h1>
+    <div>
+        
+        <Text />
+        
+        <textarea
+            value={state.userInput}
+            onChange={onInputChange}
+            placeholder="Start typing..."
+        ></textarea>
+    
+        <button onClick={onRestart}>Restart</button>
+
     </div>
 
-    <div className="body">
-      <input onChange={newInput}></input>
-      <p>{words}</p>
-
-      <p>{word}</p>
-    </div>
-    
-    </div>
-  );
+    );
 }
+
 
 export default App;
