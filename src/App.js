@@ -1,6 +1,5 @@
 import Text from './Text';
-import { useState } from 'react';
-import './App.css';
+import { useState, useEffect } from 'react';
 
 const App = () => {
     
@@ -8,16 +7,36 @@ const App = () => {
         text: 'Test',
         userInput: ''
     }
-    const [state, setState] = useState(initialState);
+    
+    const [userInput, setUserInput] = useState(initialState.userInput);
+    const [text, setText] = useState('');
+
+    const getText = async () => {
+        const res = await fetch("https://random-word-api.herokuapp.com/word?number=10")
+        const json = await res.json();
+        let body = '';
+        
+        for (let i = 0; i < json.length; i++) {
+          body += (json[i] + ' ');
+        }
+        setText(body);
+      }
+
+      useEffect(() => {
+        getText();
+      }, []);  
+      
 
     const onRestart = () => {
-        setState(initialState);
+        setUserInput(initialState.userInput);
     }
 
     const onInputChange = (event) => {
-        setState({
-            userInput: event.target.value
-        })
+        setUserInput(event.target.value)
+    }
+
+    const onNew = () => {
+        getText();
     }
     
     return (
@@ -25,16 +44,19 @@ const App = () => {
     <div>
         
         <Text 
-            userInput={state.userInput}
+            userInput={userInput}
+            getText={getText}
+            text={text}
         />
         
         <textarea
-            value={state.userInput}
+            value={userInput}
             onChange={onInputChange}
             placeholder="Start typing..."
         ></textarea>
     
         <button onClick={onRestart}>Restart</button>
+        <button onClick={onNew}>New Text</button>
 
     </div>
 
