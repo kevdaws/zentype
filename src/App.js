@@ -55,8 +55,8 @@ const App = () => {
             placeholder="Start typing..."
         ></textarea>
     
-        <button onClick={onRestart}>Restart</button>
-        <button onClick={onNew}>New Text</button>
+        <button className="restart" onClick={onRestart}>Restart</button>
+        <button className="new" onClick={onNew}>New Text</button>
 
     </div>
 
