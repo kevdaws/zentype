@@ -2,9 +2,9 @@
 import './Text.css';
 import { useState, useEffect } from 'react';
 
-const Text = () => {
+const Text = (props) => {
   
-  const [text, setText] = useState([]);
+  const [text, setText] = useState('');
 
   useEffect(() => {
     getText();
@@ -13,15 +13,28 @@ const Text = () => {
   const getText = async () => {
     const res = await fetch("https://random-word-api.herokuapp.com/word?number=10")
     const json = await res.json();
-    setText(json);
+    let body = '';
+    
+    for (let i = 0; i < json.length; i++) {
+      body += (json[i] + ' ');
+    }
+    setText(body);
   }
+  
+  
   
   return (
     
     <div className="Text">
       {
-        text.map((letter, index) => {
-          return <span key={index}>{letter}</span>
+        text.split(' ').map((letter, index) => {
+          console.log(letter);
+          let color;
+          if (index < props.userInput.length) {
+            color = letter[index] === props.userInput[index] ? '#dfffa0' : '#fcbea4';
+          }
+          
+          return <span key={index} style={{backgroundColor: color}}>{letter}</span>
         })
       }
 

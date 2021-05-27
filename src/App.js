@@ -1,5 +1,6 @@
 import Text from './Text';
 import { useState } from 'react';
+import './App.css';
 
 const App = () => {
     
@@ -23,7 +24,9 @@ const App = () => {
     
     <div>
         
-        <Text />
+        <Text 
+            userInput={state.userInput}
+        />
         
         <textarea
             value={state.userInput}
